@@ -70,7 +70,7 @@ export default function ProductComponents() {
                   <Button
                     className="product-btn w-100 text-bg-dark border-dark rounded-0"
 
-                    onClick={() => dispatch(AddCartArr({id: product.id, title: product.title, category: product.category, price: product.price, image: product.image }))}>Add to cart</Button>
+                    onClick={() => dispatch(AddCartArr({id: product.id, title: product.title, category: product.category, price: product.price, image: product.image,quantity:1 }))}>Add to cart</Button>
               </Card.Body>
             </Card>
           </CardGroup>

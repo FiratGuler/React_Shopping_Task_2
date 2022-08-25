@@ -10,8 +10,12 @@ type productState = {
     error: string,
     activeFilter: string,
     cartArr: ProductType[],
-    cartTotal: number,
-    show: boolean
+    cartStateTotalPrice: number,
+    cartTotalPrice: number
+    cartTotalProducts: number
+    show: boolean,
+
+
 }
 const initialState: productState = {
     items: [],
@@ -19,8 +23,12 @@ const initialState: productState = {
     error: "",
     activeFilter: 'all',
     cartArr: [],
-    cartTotal: 0,
-    show: false
+    cartStateTotalPrice: 0,
+    cartTotalPrice: 0,
+    cartTotalProducts: 0,
+    show: false,
+
+
 
 }
 export const getProductAsync = createAsyncThunk('getProductAsync', () => {
@@ -39,15 +47,38 @@ export const productSlice = createSlice({
     reducers: {
         changeActiveFilter: (state, action) => {
             state.activeFilter = action.payload
+
         },
         AddCartArr: (state, action) => {
             state.cartArr.push(action.payload)
-            state.cartTotal += action.payload.price
-            state.show=true
+            state.cartStateTotalPrice += action.payload.price
+            state.cartTotalPrice += action.payload.price
+            state.show = true
+            state.cartTotalProducts += 1
         },
-        ShowHide: (state,action) => {
+        ShowHide: (state, action) => {
             state.show = action.payload
+        },
+        DeleteCartProduct: (state, action) => {
+            const filtered = state.cartArr.filter((item) => item.id !== action.payload)
+            state.cartArr.map((cart) => cart.id === action.payload ? state.cartTotalPrice -= (cart.quantity) * (cart.price) : '')
+            state.cartArr = filtered
+        },
+        QuantityIncrease: (state, action) => {
+            state.cartArr.map((cart) => cart.id === action.payload ? cart.quantity += 1 : '')
+            state.cartArr.map((cart) => cart.id === action.payload ? state.cartTotalPrice += cart.price : '')
+
+            state.cartTotalProducts += 1
+        },
+        QuantityDecrease: (state, action) => {
+            state.cartArr.map((cart) => cart.id === action.payload ? cart.quantity -= 1 : '')
+            state.cartTotalProducts -= 1
+            if (state.cartTotalPrice !== 0) {
+                state.cartArr.map((cart) => cart.id === action.payload ? state.cartTotalPrice -= cart.price : '')
+            }
+
         }
+
     },
     extraReducers: (builder) => {
         builder.addCase(getProductAsync.pending, (state, action) => {
@@ -62,7 +93,7 @@ export const productSlice = createSlice({
         builder.addCase(getProductAsync.rejected, (state, action) => {
             state.loading = false;
             state.items = []
-            state.error = "ERROR FETCHING PRODUCT DATA"
+            state.error = "SAYFAYI YENİLEYİNİZ!"
         })
     }
 
@@ -70,7 +101,7 @@ export const productSlice = createSlice({
 
 
 
-export const { changeActiveFilter, AddCartArr,ShowHide } = productSlice.actions;
+export const { changeActiveFilter, AddCartArr, ShowHide, QuantityIncrease, QuantityDecrease, DeleteCartProduct } = productSlice.actions;
 export default productSlice.reducer;
 
 export interface Rating {
@@ -87,5 +118,5 @@ export interface ProductType {
     category: string;
     image: string;
     rating: Rating;
-
+    quantity: number;
 }
