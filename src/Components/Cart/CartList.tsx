@@ -8,8 +8,7 @@ export default function CartList() {
     const cart = useAppSelector((state) => state.products.cartArr)
     return (
         <>
-            
-            <Row>
+            {cart.length > 0 ? <Row>
                 {cart.map((cart) => (
                     <Col key={cart.id} className='p-0'>
                         <Card className='w-100 ps-3 border-0 border-top border-dark rounded-0 bg-dark '>
@@ -32,6 +31,12 @@ export default function CartList() {
                     </Col>
                 ))}
             </Row>
+                :
+                <div  className='text-center'>
+                    <span>
+                    Add some products in the cart <br/> :) </span>
+                    </div>}
+
         </>
 
     )
