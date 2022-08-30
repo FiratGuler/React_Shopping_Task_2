@@ -2,14 +2,16 @@ import { useAppSelector } from '../../redux/store';
 import { Row, Col, Container, Button } from 'react-bootstrap';
 
 
+
 export default function CartTotal() {
     const cartTotalPrice = useAppSelector((state) => state.products.cartTotalPrice)
     const cartw = useAppSelector((state) => state.products.cartArr.map((a) => a.quantity))
 
 
     return (
-        <Container>
-            <Row className='border border-warning'>
+        <Container className='position-absolute bottom-0 end-0 border-top border-secondary pt-4 mb-4'>
+          
+            <Row className=''>
                 <Col className='text-muted mt-3'>
                     <span>SUBTOTAL</span>
                 </Col>
@@ -20,7 +22,7 @@ export default function CartTotal() {
                 </Col>
             </Row>
             <Row>
-                <Button onClick={()=>window.alert(`Checkout - Subtotal : ${cartTotalPrice.toFixed(2)}` )}>CHECKOUT</Button>
+                <Button variant='dark' onClick={()=>window.alert(`Checkout - Subtotal : ${cartTotalPrice.toFixed(2)}` )}>CHECKOUT</Button>
             </Row>
         </Container>
     )

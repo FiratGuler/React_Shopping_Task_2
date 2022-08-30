@@ -1,10 +1,13 @@
 
-import { RootState } from '../redux/store'
-import { getProductAsync, AddCartArr } from '../redux/products/productSlice'
+import { RootState } from '../../redux/store'
+import { getProductAsync, AddCartArr } from '../../redux/products/productSlice'
 import { useEffect } from 'react'
-import { useAppDispatch, useAppSelector } from '../redux/store'
+import { useAppDispatch, useAppSelector } from '../../redux/store'
 
 import { Row, Col, Card, CardGroup, Button, Container } from 'react-bootstrap'
+
+import './style.css';
+
 
 
 
@@ -48,36 +51,36 @@ export default function ProductComponents() {
   return (
     <Container>
 
-      {product.items.length} Product(s) found
-      <Row className="mt-3">
+      {filtered.length} Product(s) found
+      <Row >
         {product.loading && "Loading..."}
         {product.error && product.error}
 
         {filtered.map((product) => (
-          <Col key={product.id} md="3">
+          <Col key={product.id} md="3" >
 
-            <CardGroup >
+            <CardGroup className='' >
               <Card className="mt-2 border-0 product-card text-center " style={{ width: '18rem' }}>
-                <Card.Img className="product-img p-3" src={product.image} height='250px' />
+                <Card.Img className="product-img p-3 product_card_img" src={product.image} height='250px' />
                 <Card.Body >
                   <Card.Title>{product.title.substring(0, 12)}</Card.Title>
                   <Card.Text>
 
                     $ {product.price} <br />
-                  <span className='text-muted'>  or 3 x {((product.price) / 3).toFixed(2)}</span>
+                    <span className='text-muted'>  or 3 x {((product.price) / 3).toFixed(2)}</span>
 
                   </Card.Text>
                   <Button
-                    className="product-btn w-100 text-bg-dark border-dark rounded-0"
+                    className="product-btn w-100 text-bg-dark border-dark rounded-0 " 
 
-                    onClick={() => dispatch(AddCartArr({id: product.id, title: product.title, category: product.category, price: product.price, image: product.image,quantity:1 }))}>Add to cart</Button>
-              </Card.Body>
-            </Card>
-          </CardGroup>
+                    onClick={() => dispatch(AddCartArr({ id: product.id, title: product.title, category: product.category, price: product.price, image: product.image, quantity: 1 }))}>Add to cart</Button>
+                </Card.Body>
+              </Card>
+            </CardGroup>
           </Col>
 
         ))}
-    </Row>
+      </Row>
     </Container >
   )
 }

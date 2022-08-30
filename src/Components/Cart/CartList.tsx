@@ -1,8 +1,8 @@
 import { useAppSelector, useAppDispatch } from '../../redux/store';
-import { Row, Col, Card, Button } from 'react-bootstrap';
+import { Row, Col, Card, Button, Container } from 'react-bootstrap';
+import {XLg,Dash,PlusLg} from 'react-bootstrap-icons'
 
-
-import { QuantityIncrease, QuantityDecrease,DeleteCartProduct } from "../../redux/products/productSlice"
+import { QuantityIncrease, QuantityDecrease, DeleteCartProduct } from "../../redux/products/productSlice"
 
 export default function CartList() {
     const dispatch = useAppDispatch()
@@ -15,44 +15,58 @@ export default function CartList() {
 
     return (
         <>
-            {cart.length > 0 ? <Row>
-                {cart.map((cart) => (
-                    <Col key={cart.id} className='p-0'>
-                        <Button size='sm' className='float-end' onClick={()=>dispatch(DeleteCartProduct(cart.id))}>x</Button>
-                        <Card className='w-100 ps-3 border-0 border-top border-dark rounded-0 bg-dark '>
 
-                            <Row>
-                                <Col md='2'>
+            {cart.length > 0 ?
 
-                                    <Card.Img variant="start" src={cart.image} height='100px' width='60px' />
+                <Container>
+                    {cart.map((cart) => (
 
-                                </Col>
-                                <Col md='10'>
-                                    <Card.Body className='mx-auto fs-6'>
-                                        <Card.Title>{cart.title}</Card.Title>
-                                        <Card.Text className='fs-6 text-muted'>
-                                            {cart.category}<br />
-                                            Quantity:{cart.quantity}
-                                            <span className="text-warning float-end">
-                                                ${cart.price}<br />
-                                                <Button size='sm' variant='outline-secondary' onClick={() => dispatch(QuantityDecrease(cart.id))}>-</Button>
-                                                <Button size='sm' variant='outline-secondary' onClick={() => dispatch(QuantityIncrease(cart.id))}>+</Button>
+                        <Row key={cart.id} className='mb-4'>
+                            <Col sm='3'>
+                                <Card.Img variant="start" src={cart.image} height='100px' width='60px' />
+                            </Col>
+                            <Col sm='9'>
+                                <Row>
+                                    <Col sm='9' className='p-0'>
+                                        <Card className='border-0 border-top border-dark rounded-0 bg-dark '>
 
-                                            </span>
+                                            <Card.Body className='p-0 fs-6'>
+                                                <Card.Title>{cart.title.substring(0, 12)}</Card.Title>
+                                                <Card.Text className='fs-6 text-muted'>
+                                                    {cart.category}<br />
+                                                    Quantity:{cart.quantity}
+                                                </Card.Text>
+                                            </Card.Body>
 
-                                        </Card.Text>
-                                    </Card.Body>
-                                </Col>
-                            </Row>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+
+                                        </Card>
+                                    </Col>
+
+                                    <Col sm='3' className='p-0'>
+                                        <Row>
+                                            <Col><Button size='sm' variant='bacground-dark text-black' className='border-dark float-end'  onClick={() => dispatch(DeleteCartProduct(cart.id))}><XLg/></Button></Col>
+
+                                            <Col> <p  className='float-end text-warning mb-2 mt-2'>${cart.price}</p></Col>
+                                            <Col>
+                                                <Button size='sm' variant='bacground-dark text-white' className='float-end p-1 border-dark'  onClick={() => dispatch(QuantityIncrease(cart.id))}><PlusLg/></Button>
+                                                <Button size='sm' variant='bacground-dark text-white' 
+                                                className={cart.quantity === 0 ? 'float-end disabled p-1 border-dark' : 'float-end p-1 border-dark'}  
+                                                onClick={() => dispatch(QuantityDecrease(cart.id))}><Dash/></Button>
+                                            </Col>
+                                        </Row>
+                                    </Col>
+                                </Row>
+                            </Col>
+                           
+                        </Row>
+                    ))}
+                </Container>
                 :
                 <div className='text-center'>
                     <span>
                         Add some products in the cart <br /> :) </span>
                 </div>}
+
 
         </>
 

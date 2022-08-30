@@ -4,6 +4,7 @@ import axios from "axios"
 
 
 
+
 type productState = {
     items: ProductType[],
     loading: boolean,
@@ -50,18 +51,30 @@ export const productSlice = createSlice({
 
         },
         AddCartArr: (state, action) => {
+           
+            state.cartTotalProducts += 1
             state.cartArr.push(action.payload)
+
             state.cartStateTotalPrice += action.payload.price
             state.cartTotalPrice += action.payload.price
-            state.show = true
             state.cartTotalProducts += 1
+            
+            state.show = true
         },
         ShowHide: (state, action) => {
             state.show = action.payload
         },
         DeleteCartProduct: (state, action) => {
             const filtered = state.cartArr.filter((item) => item.id !== action.payload)
-            state.cartArr.map((cart) => cart.id === action.payload ? state.cartTotalPrice -= (cart.quantity) * (cart.price) : '')
+
+            state.cartArr.map((cart) => cart.id === action.payload
+                ? state.cartTotalPrice -= (cart.quantity) * (cart.price)
+                : '')
+
+            state.cartArr.map((cart) => cart.id === action.payload
+                ? state.cartTotalProducts -= cart.quantity
+                : '')
+
             state.cartArr = filtered
         },
         QuantityIncrease: (state, action) => {
