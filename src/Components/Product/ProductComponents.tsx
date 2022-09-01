@@ -1,10 +1,10 @@
 
 import { RootState } from '../../redux/store'
-import { getProductAsync, AddCartArr } from '../../redux/products/productSlice'
+import { getProductAsync, AddCartArr, } from '../../redux/products/productSlice'
 import { useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../redux/store'
 
-import { Row, Col, Card, CardGroup, Button, Container } from 'react-bootstrap'
+import { Row, Col, Card, CardGroup, Button, Container,Spinner } from 'react-bootstrap'
 
 import './style.css';
 
@@ -16,44 +16,50 @@ export default function ProductComponents() {
 
   const dispatch = useAppDispatch()
 
-  useEffect(() => { dispatch(getProductAsync()) }, [dispatch])
+    useEffect(() => {
+        dispatch(getProductAsync())
+    
+      }, [dispatch])
+ 
 
   const product = useAppSelector((state: RootState) => state.products)
   const activeFilter = useAppSelector((state: RootState) => state.products.activeFilter)
-
+  
+  const filterArr = useAppSelector((state: RootState) => state.products.filteredArr)
+  
 
 
   let filtered;
-  filtered = product.items
-  if (activeFilter !== 'all') {
-    filtered = product.items.filter((product) => {
-      switch (activeFilter) {
+  filtered = filterArr
+ 
+   if (activeFilter !== 'all') {
+     filtered = filterArr.filter((product) => {
+       switch (activeFilter) {
+         case "men's clothing":
+           return product.category === "men's clothing";
+         case "women's clothing":
+           return product.category === "women's clothing" ;
+         case 'jewelery':
+           return product.category === 'jewelery' && product;
+         case 'electronics':
+           return product.category === 'electronics' && product;
+         default:
+           return product;
+       }
+     }
+     )
+   }
 
-        case "men's clothing":
-          return product.category === "men's clothing" && product;
-
-        case "women's clothing":
-          return product.category === "women's clothing" && product;
-
-        case 'jewelery':
-          return product.category === 'jewelery' && product;
-
-        case 'electronics':
-          return product.category === 'electronics' && product;
-
-        default:
-          return product;
-      }
-    }
-    )
-  }
 
   return (
     <Container>
 
       {filtered.length} Product(s) found
       <Row >
-        {product.loading && "Loading..."}
+        {product.loading &&
+            <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>}
         {product.error && product.error}
 
         {filtered.map((product) => (

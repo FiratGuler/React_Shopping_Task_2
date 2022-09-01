@@ -7,19 +7,22 @@ import axios from "axios"
 
 type productState = {
     items: ProductType[],
+    filteredArr: ProductType[],
     loading: boolean,
     error: string,
     activeFilter: string,
     cartArr: ProductType[],
     cartStateTotalPrice: number,
-    cartTotalPrice: number
-    cartTotalProducts: number
+    cartTotalPrice: number,
+    cartTotalProducts: number,
     show: boolean,
+    rangeFilter:number,
 
 
 }
 const initialState: productState = {
     items: [],
+    filteredArr:[],
     loading: false,
     error: "",
     activeFilter: 'all',
@@ -28,7 +31,7 @@ const initialState: productState = {
     cartTotalPrice: 0,
     cartTotalProducts: 0,
     show: false,
-
+    rangeFilter:1000,
 
 
 }
@@ -37,22 +40,28 @@ export const getProductAsync = createAsyncThunk('getProductAsync', () => {
         .get('https://fakestoreapi.com/products')
         .then(response => response.data)
 })
-// export const getProductAsync = createAsyncThunk("getProductAsync", async () => {
-//     const response = await axios.get<ProductType>('https://fakestoreapi.com/products');
-//     return response.data;
-// })
+
 
 export const productSlice = createSlice({
     name: 'product',
     initialState: initialState,
     reducers: {
+        
         changeActiveFilter: (state, action) => {
             state.activeFilter = action.payload
 
         },
+        rangeValue: (state, action) => {
+            state.rangeFilter = action.payload
+
+        },
+        filterActions:(state,action)=>{
+           
+           state.filteredArr=action.payload
+        },
         AddCartArr: (state, action) => {
            
-            state.cartTotalProducts += 1
+           
             state.cartArr.push(action.payload)
 
             state.cartStateTotalPrice += action.payload.price
@@ -101,6 +110,7 @@ export const productSlice = createSlice({
         builder.addCase(getProductAsync.fulfilled, (state, action: PayloadAction<ProductType[]>) => {
 
             state.items = action.payload
+            state.filteredArr = action.payload
             state.loading = false;
         });
         builder.addCase(getProductAsync.rejected, (state, action) => {
@@ -114,7 +124,7 @@ export const productSlice = createSlice({
 
 
 
-export const { changeActiveFilter, AddCartArr, ShowHide, QuantityIncrease, QuantityDecrease, DeleteCartProduct } = productSlice.actions;
+export const { changeActiveFilter, AddCartArr, ShowHide, QuantityIncrease, QuantityDecrease, DeleteCartProduct,rangeValue,filterActions } = productSlice.actions;
 export default productSlice.reducer;
 
 export interface Rating {

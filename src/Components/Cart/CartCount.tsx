@@ -14,7 +14,8 @@ export default function CartCount() {
                 <Col md='3' >
                     <span className="position-relative">
                         <h2><Cart3 /></h2>
-                        <span className="position-absolute top-100 start-100 translate-middle badge border border-warning rounded-circle bg-warning p-2">  {cartCount}</span>
+                        <span className="position-absolute top-100 start-100 translate-middle badge border border-warning rounded-circle bg-warning p-2">
+                              {cartCount}</span>
                     </span>
                 </Col>
                 <Col></Col>

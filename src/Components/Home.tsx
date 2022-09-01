@@ -1,10 +1,16 @@
-import React from 'react'
+
 import { Container, Row, Col } from "react-bootstrap";
+
+
+
 import CartComponents from './Cart/CartComponents';
 import FilterComponents from './Filter/FilterComponents'
 import ProductComponents from './Product/ProductComponents'
 
 export default function Home() {
+    
+
+
     return (
         <Container className='fluid mt-5'>
             <Row>

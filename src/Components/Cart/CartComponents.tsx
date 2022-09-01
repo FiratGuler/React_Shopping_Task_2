@@ -22,7 +22,7 @@ export default function CartComponents() {
 
     return (
         <>
-            <Button className='position-absolute top-0 end-0 m-1' variant="dark" onClick={handleShow} >
+            <Button className='position-absolute top-0 end-0 m-1 me-3' variant="dark" onClick={handleShow} >
             <h3><Cart3/></h3>
             <span className="position-absolute top-100 start-100 translate-middle badge border border-warning rounded-circle bg-warning p-2">  {cartCount}</span>
 
